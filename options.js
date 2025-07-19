@@ -1,11 +1,16 @@
 var check = document.querySelector('input');
 
-function setBrowserAction (isBlack) {
-  chrome.browserAction.setIcon({
-    path: isBlack ? 'icon/icon-black.png' : 'icon/icon.png'
+function setAction (isBlack) {
+  chrome.action.setIcon({
+    path: {
+      "16": isBlack ? 'icon/icon-black.png' : 'icon/icon.png',
+      "32": isBlack ? 'icon/icon-black.png' : 'icon/icon.png',
+      "48": isBlack ? 'icon/icon-black.png' : 'icon/icon.png',
+      "128": isBlack ? 'icon/icon-black.png' : 'icon/icon.png'
+    }
   });
 
-  chrome.browserAction.setTitle({
+  chrome.action.setTitle({
     title: isBlack ? 'Not That Colorful QRCode' : 'Colorful QRCode'
   });
 }
@@ -21,7 +26,7 @@ check.onchange = function () {
     isBlack: this.checked
   });
 
-  setBrowserAction(this.checked);
+  setAction(this.checked);
 
   chrome.tabs.getCurrent(function (tab) {
     chrome.tabs.remove(tab.id);
@@ -31,5 +36,5 @@ check.onchange = function () {
 chrome.storage.sync.get(function (options) {
   check.checked = !!options && options.isBlack;
 
-  setBrowserAction(check.checked);
+  setAction(check.checked);
 });

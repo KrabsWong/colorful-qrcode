@@ -1,47 +1,49 @@
-![](http://i.imgur.com/9QCt6D6.png)  [Colorful-QRCode](https://github.com/L3au/colorful-qrcode)
-====
+# Colorful QRCode - Modern Chrome Extension
 
-![](http://i.imgur.com/cSOmAQq.png)
+A simple and colorful QR code generator Chrome extension, now updated for Manifest V3.
 
-### [Chrome WebStore](https://chrome.google.com/webstore/detail/nenelpicledkmgnlaibhjkjobffpjoan/)
+## ✨ Features
 
-----
+- **Simple & Clean**: One-click QR code generation for any webpage
+- **Colorful**: Uses beautiful random colors for QR codes
+- **Offline Support**: Works without internet connection using Canvas
+- **Local IP Detection**: Automatically converts localhost URLs to local IP addresses
+- **Customization**: Toggle between colorful and black & white modes
 
-**2016-5-25**
+## 🚀 What's New (v2.0.0)
+- Updated to Chrome Manifest V3
+- Modernized code with ES6+ features
+- Improved privacy and security
+- Better performance and reliability
 
-- 修复 Chorme Dev 版本 `Promise.defer` 缺失问题
+## 📖 Usage
 
-**2016-3-12**
+1. Click the extension icon in your browser toolbar
+2. The current page URL will be automatically converted to a QR code
+3. Click on the QR code to enter custom text
+4. Press Enter to generate a new QR code
 
-- 修复chrome升级49版本后localhost地址获取问题，[原因](https://developers.google.com/web/updates/2016/02/chrome-49-deprecations?hl=en#error-and-success-handlers-required-in-rtcpeerconnection-methods)
+## 🔐 Privacy & Security
 
-**2015-11-23**
+This extension processes all data locally on your device:
+- No data collection or transmission
+- All processing happens in your browser
+- Minimal permissions required
+- Open source with transparent code
 
-- 输入框展示本地IP地址，方便复制或修改
+## 🔧 Technical Details
 
-**2015-9-16**
+- **Manifest**: V3 (latest standard)
+- **Permissions**: Minimal (`activeTab`, `storage`)
+- **Libraries**: 
+  - [qrcode.js](https://github.com/davidshimjs/qrcodejs/) for QR generation
+  - [randomColor](https://github.com/davidmerfield/randomColor) for color generation
 
-- 修复获取本地IPV4地址bug
+## 📜 License
 
-**2015-8-28**
+MIT License - see LICENSE file for details.
 
-- 修复手动输入字符时换行，按住`shift`或`ctrl`时回车可换行
-- 增加`localhost`自动转换成本地IP，如`localhost:2333`扫描后打开如`192.168.11.119:2333`
+## 🙏 Credits
 
-----
-
-1. 颜色是随机生成的深彩色
-1. 使用Canvas生成，不联网也可以使用哦
-2. 点开Popup，点击生成的二维码或者`回车`，然后可以手动输入需要的字符，再次`回车`生成
-3. 输入为空时，默认生成当前页面的二维码
-4. 还是喜欢黑色？设置自己找找吧
-
-![](http://i.imgur.com/xyyZ32l.png)
-
-----
-
-感谢：
-
-QRCode:  [https://github.com/davidshimjs/qrcodejs/](https://github.com/davidshimjs/qrcodejs/)
-
+QRCode: [https://github.com/davidshimjs/qrcodejs/](https://github.com/davidshimjs/qrcodejs/)
 RandomColor: [https://github.com/davidmerfield/randomColor](https://github.com/davidmerfield/randomColor)

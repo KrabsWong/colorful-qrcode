@@ -1,49 +1,44 @@
-// polyfill Promise.defer
-Promise.defer = Promise.defer || function () {
-    var defer = {};
-    var promise = new Promise(function (resolve, reject) {
-        defer.resolve = resolve;
-        defer.reject = reject;
-    });
-
-    defer.promise = promise;
-
-    return defer;
-};
+// Modern Promise utilities
 
 // 获取本地局域网IP
 function getLocalIPs() {
-    var ips   = [];
-    var defer = Promise.defer();
-    var IPV4 = /\b(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]{1,2})(\.(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})){3}\b/;
-
-    var RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection;
-
-    var rtc = new RTCPeerConnection({
-        iceServers: []
-    });
-
-    rtc.createDataChannel('');
-
-    rtc.onicecandidate = function (e) {
-        if (!e.candidate) {
-            defer.resolve(ips);
+    return new Promise((resolve) => {
+        var ips = [];
+        var IPV4 = /\b(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]{1,2})(\.(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})){3}\b/;
+        
+        var RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection;
+        
+        if (!RTCPeerConnection) {
+            resolve(ips);
             return;
         }
 
-        var ret = IPV4.exec(e.candidate.candidate);
+        var rtc = new RTCPeerConnection({
+            iceServers: []
+        });
 
-        if (ret && ips.indexOf(ret[0]) === -1) {
-            ips.push(ret[0]);
-        }
-    };
-    rtc.createOffer(function (sdp) {
-        rtc.setLocalDescription(sdp);
-    }, function (err) {
-        console.log(err);
+        rtc.createDataChannel('');
+
+        rtc.onicecandidate = function (e) {
+            if (!e.candidate) {
+                resolve(ips);
+                return;
+            }
+
+            var ret = IPV4.exec(e.candidate.candidate);
+
+            if (ret && ips.indexOf(ret[0]) === -1) {
+                ips.push(ret[0]);
+            }
+        };
+        
+        rtc.createOffer()
+            .then(sdp => rtc.setLocalDescription(sdp))
+            .catch(err => {
+                console.log(err);
+                resolve(ips);
+            });
     });
-
-    return defer.promise;
 }
 
 chrome.tabs.query({
@@ -58,10 +53,10 @@ chrome.tabs.query({
     txt.value = url;
 
     // get storage options
-    var defer = Promise.defer();
-
-    chrome.storage.sync.get(function (options) {
-        defer.resolve(options || {});
+    const optionsPromise = new Promise((resolve) => {
+        chrome.storage.sync.get((options) => {
+            resolve(options || {});
+        });
     });
 
     // get local ip
@@ -72,7 +67,7 @@ chrome.tabs.query({
         promise = getLocalIPs();
     }
 
-    Promise.all([defer.promise, promise]).then(function (result) {
+    Promise.all([optionsPromise, promise].filter(Boolean)).then(function (result) {
         var options = result[0];
         var ips     = result[1];
 
